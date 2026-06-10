@@ -5,16 +5,16 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { useGetTicket, getGetTicketQueryKey } from "@/api/client";
+import { useGetTicket, getGetTicketQueryKey,useCreateTicketNote} from "@/api/client";
 import { format } from "date-fns";
 import { StatusBadge, CategoryBadge } from "./status-badge";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "@/hooks/use-toast";
 import { getCategoryLabel, getStatusLabel } from "@/helpers/getStatus";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface TicketDetailsModalProps {
   id: number | null;
@@ -22,26 +22,8 @@ interface TicketDetailsModalProps {
   onOpenChange: (open: boolean) => void;
 }
 
-const API_URL = import.meta.env.VITE_API_URL || "http://localhost:3006";
 
-async function createNote(ticketId: number, message: string) {
-  const token = localStorage.getItem("token");
 
-  const res = await fetch(`${API_URL}/tickets/${ticketId}/notes`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token ?? ""}`,
-    },
-    body: JSON.stringify({ message }),
-  });
-
-  if (!res.ok) {
-    throw new Error("Failed to create note");
-  }
-
-  return res.json();
-}
 
 export function TicketDetailsModal({
   id,
@@ -58,34 +40,7 @@ export function TicketDetailsModal({
     },
   });
 
-  const addNote = useMutation({
-    mutationFn: async (msg: string) => {
-      if (!id) throw new Error("Missing ticket id");
-      return createNote(id, msg);
-    },
-
-    onSuccess: () => {
-      setMessage("");
-
-      if (id) {
-        queryClient.invalidateQueries({
-          queryKey: getGetTicketQueryKey(id),
-        });
-      }
-
-      toast({
-        title: "تم إضافة الملاحظة",
-      });
-    },
-
-    onError: () => {
-      toast({
-        title: "فشل إضافة الملاحظة",
-        variant: "destructive",
-      });
-    },
-  });
-
+const addNote = useCreateTicketNote();
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
@@ -191,15 +146,44 @@ export function TicketDetailsModal({
                   placeholder="اكتب ملاحظة داخلية..."
                 />
 
-                <Button
-                  className="w-full"
-                  disabled={!message.trim() || !id || addNote.isPending}
-                  onClick={() => addNote.mutate(message)}
-                >
-                  {addNote.isPending
-                    ? "جاري الإرسال..."
-                    : "إضافة ملاحظة"}
-                </Button>
+<Button
+  className="w-full"
+  disabled={!message.trim() || !id || addNote.isPending}
+  onClick={() => {
+    if (!id) return;
+
+    addNote.mutate(
+      {
+        ticketId: id,
+        message,
+      },
+      {
+        onSuccess: () => {
+          setMessage("");
+
+          queryClient.invalidateQueries({
+            queryKey: getGetTicketQueryKey(id),
+          });
+
+          toast({
+            title: "تم إضافة الملاحظة",
+          });
+        },
+
+        onError: () => {
+          toast({
+            title: "فشل إضافة الملاحظة",
+            variant: "destructive",
+          });
+        },
+      }
+    );
+  }}
+>
+  {addNote.isPending
+    ? "جاري الإرسال..."
+    : "إضافة ملاحظة"}
+</Button>
               </div>
             </div>
           </div>

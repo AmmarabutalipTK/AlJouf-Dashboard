@@ -190,6 +190,37 @@ export function useListTickets(
   });
 }
 
+export function useCreateTicketNote() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({
+      ticketId,
+      message,
+    }: {
+      ticketId: number;
+      message: string;
+    }) => {
+      const { data } = await api.post(
+        `/tickets/${ticketId}/notes`,
+        { message }
+      );
+
+      return data;
+    },
+
+    onSuccess: (_, variables) => {
+      queryClient.invalidateQueries({
+        queryKey: ["ticket", variables.ticketId],
+      });
+
+      queryClient.invalidateQueries({
+        queryKey: ["ticket"],
+      });
+    },
+  });
+}
+
 export function useGetTicket(
   id?: number,
   _options?: any
