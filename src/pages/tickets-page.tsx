@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { AppLayout } from "@/components/layout/app-layout";
 import { TicketTable } from "@/components/tickets/ticket-table";
@@ -17,6 +17,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
+import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Filter } from "lucide-react";
 
@@ -36,10 +37,32 @@ export function TicketsPage({
       "all"
     );
 
+  const [search, setSearch] =
+    useState("");
+
+  const [debouncedSearch, setDebouncedSearch] =
+    useState("");
+
   const [page, setPage] =
     useState(1);
 
   const limit = 50;
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(
+        search.trim()
+      );
+      setPage(1);
+    }, 500);
+
+    return () =>
+      clearTimeout(timer);
+  }, [search]);
+
+  useEffect(() => {
+    setPage(1);
+  }, [category]);
 
   const {
     data,
@@ -50,6 +73,8 @@ export function TicketsPage({
       status !== "all"
         ? status
         : undefined,
+    search:
+      search,
     page,
     limit,
   });
@@ -74,6 +99,8 @@ export function TicketsPage({
     setPage(1);
   };
 
+  console.log({data})
+
   return (
     <AppLayout>
       <div className="flex flex-col gap-5 pb-8">
@@ -91,12 +118,10 @@ export function TicketsPage({
             shadow-[0_20px_60px_rgba(0,0,0,.04)]
           "
         >
-          {/* Decorative Blobs */}
           <div className="absolute -left-24 -top-24 h-64 w-64 rounded-full bg-primary/10 blur-3xl" />
 
           <div className="absolute -bottom-24 -right-24 h-64 w-64 rounded-full bg-green-200/30 blur-3xl" />
 
-          {/* Header */}
           <div className="relative border-b border-green-100/80 px-8 py-8">
             <div className="flex flex-col gap-3">
               <div
@@ -139,7 +164,6 @@ export function TicketsPage({
             </div>
           </div>
 
-          {/* Filters */}
           <div
             className="
               relative
@@ -166,6 +190,25 @@ export function TicketsPage({
             </div>
 
             <div className="flex flex-col gap-3 sm:flex-row">
+              <Input
+                value={search}
+                onChange={(e) =>
+                  setSearch(
+                    e.target.value
+                  )
+                }
+                placeholder="البحث برقم الطلب أو اسم العميل..."
+                className="
+                  h-12
+                  w-full
+                  rounded-2xl
+                  border-green-100
+                  bg-white
+                  shadow-sm
+                  sm:w-80
+                "
+              />
+
               <Select
                 dir="rtl"
                 value={status}

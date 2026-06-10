@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 
 
 // export const api = axios.create({
@@ -14,11 +14,11 @@
 
 //   return config;
 // });
+
+
+
+
 // import axios from "axios";
-
-
-
-import axios from "axios";
 
 
 export const api = axios.create({
