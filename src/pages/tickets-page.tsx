@@ -8,9 +8,6 @@ import {
   ListTicketsCategory,
   ListTicketsStatus,
 } from "@/api/client";
-
-import { Input } from "@/components/ui/input";
-
 import {
   Select,
   SelectContent,
@@ -19,7 +16,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Filter, Search } from "lucide-react";
+import { Filter } from "lucide-react";
 import { useDebounce } from "@/hooks/use-debounce";
 
 interface TicketsPageProps {
@@ -33,24 +30,20 @@ export function TicketsPage({
   title,
   description,
 }: TicketsPageProps) {
-  const [search, setSearch] =
-    useState("");
+
 
   const [status, setStatus] =
     useState<
       ListTicketsStatus | "all"
     >("all");
 
-  const debouncedSearch =
-    useDebounce(search, 500);
+
 
   const {
     data,
     isLoading,
   } = useListTickets({
     category,
-    search:
-      debouncedSearch || undefined,
     status:
       status !== "all"
         ? status
@@ -149,7 +142,7 @@ export function TicketsPage({
     </div>
 
     <div className="flex flex-col gap-3 sm:flex-row">
-      <div className="relative w-full sm:w-96">
+      {/* <div className="relative w-full sm:w-96">
         <Search className="absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
 
         <Input
@@ -167,7 +160,7 @@ export function TicketsPage({
             shadow-sm
           "
         />
-      </div>
+      </div> */}
 
       <Select
         value={status}
@@ -194,28 +187,13 @@ export function TicketsPage({
             جميع الحالات
           </SelectItem>
 
-          <SelectItem value="NEW">
-            جديدة
-          </SelectItem>
-
-          <SelectItem value="CONTACTED">
-            تم التواصل
-          </SelectItem>
-
           <SelectItem value="IN_PROGRESS">
             قيد المعالجة
           </SelectItem>
 
-          <SelectItem value="PENDING_CUSTOMER">
-            بانتظار العميل
-          </SelectItem>
 
           <SelectItem value="RESOLVED">
             محلولة
-          </SelectItem>
-
-          <SelectItem value="CLOSED">
-            مغلقة
           </SelectItem>
         </SelectContent>
       </Select>

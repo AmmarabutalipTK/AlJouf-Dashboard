@@ -309,14 +309,16 @@ export function useUpdateTicket() {
 export function useDeleteTicket() {
   const queryClient =
     useQueryClient();
+    
 
   return useMutation({
     mutationFn: async (
-      id: number
+      id: {id:number}
     ) => {
+
       const { data } =
         await api.delete(
-          `/tickets/${id}`
+          `/tickets/${id?.id}`
         );
 
       return data;

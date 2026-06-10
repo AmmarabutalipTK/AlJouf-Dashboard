@@ -16,6 +16,3 @@ api.interceptors.request.use((config) => {
 });
 // import axios from "axios";
 
-// export const api = axios.create({
-//   baseURL: "/api",
-// });

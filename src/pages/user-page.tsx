@@ -264,7 +264,7 @@ export function UsersPage() {
                 }
               />
 
-              <Select
+              <Select dir="rtl"
                 value={form.role}
                 onValueChange={(value) =>
                   setForm({ ...form, role: value })

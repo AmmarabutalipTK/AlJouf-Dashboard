@@ -15,7 +15,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { MoreHorizontal, Trash2, CheckCircle, Clock, CheckCircle2, PlayCircle, Loader2, Eye, MessageSquare } from "lucide-react";
+import { MoreHorizontal, Trash2, CheckCircle2, Loader2, Eye, MessageSquare } from "lucide-react";
 import { Ticket, TicketUpdateStatus, useUpdateTicket, useDeleteTicket, getListTicketsQueryKey, getGetStatsQueryKey } from "@/api/client";
 import { CategoryBadge } from "./status-badge";
 import { useQueryClient } from "@tanstack/react-query";
@@ -67,28 +67,12 @@ const handleAljoufNoteChange = (id: number, aljoufNote: string) => {
 
 
 
-  const handleStatusChange = (id: number, status: TicketUpdateStatus) => {
-    setUpdatingId(id);
-    updateTicket.mutate(
-      { id, data: { status } },
-      {
-        onSuccess: () => {
-          toast({ title: "تم تحديث حالة التذكرة" });
-          queryClient.invalidateQueries({ queryKey: getListTicketsQueryKey() });
-          queryClient.invalidateQueries({ queryKey: getGetStatsQueryKey() });
-          setUpdatingId(null);
-        },
-        onError: () => {
-          toast({ title: "حدث خطأ أثناء التحديث", variant: "destructive" });
-          setUpdatingId(null);
-        },
-      }
-    );
-  };
 
   const handleDelete = (id: number) => {
     if (!confirm("هل أنت متأكد من حذف هذه التذكرة؟")) return;
     setUpdatingId(id);
+
+    
     deleteTicket.mutate(
       { id },
       {
@@ -98,7 +82,8 @@ const handleAljoufNoteChange = (id: number, aljoufNote: string) => {
           queryClient.invalidateQueries({ queryKey: getGetStatsQueryKey() });
           setUpdatingId(null);
         },
-        onError: () => {
+        onError: (e) => {
+          console.log({e})
           toast({ title: "حدث خطأ أثناء الحذف", variant: "destructive" });
           setUpdatingId(null);
         },
@@ -134,7 +119,7 @@ const handleAljoufNoteChange = (id: number, aljoufNote: string) => {
   const renderStatusCell = (ticket: Ticket) => {
     const isUpdating = updatingId === ticket.id;
 
-if (ticket.category === "COMPLAINT") {
+if (ticket.category) {
   return (
     <div className="space-y-1">
       {isUpdating ? (

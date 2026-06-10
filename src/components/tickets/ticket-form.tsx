@@ -61,7 +61,7 @@ export function TicketFormModal({ open, onOpenChange }: { open: boolean, onOpenC
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle className="text-xl">إنشاء تذكرة جديدة</DialogTitle>
+          <DialogTitle className="text-xl text-right mt-5">إنشاء تذكرة جديدة</DialogTitle>
         </DialogHeader>
         
         <Form {...form}>
@@ -109,24 +109,40 @@ export function TicketFormModal({ open, onOpenChange }: { open: boolean, onOpenC
                   </FormItem>
                 )}
               />
-              <FormField
+              <FormField 
                 control={form.control}
                 name="category"
                 render={({ field }) => (
-                  <FormItem>
+                  <FormItem dir="rtl">
                     <FormLabel>التصنيف</FormLabel>
                     <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="اختر التصنيف" />
+                        <SelectTrigger dir="rtl">
+                          <SelectValue  placeholder="اختر التصنيف" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="complaints">شكوى</SelectItem>
-                        <SelectItem value="modifications">تعديل طلب</SelectItem>
-                        <SelectItem value="cancellations">إلغاء طلب</SelectItem>
-                        <SelectItem value="returns">استبدال / استرجاع</SelectItem>
-                        <SelectItem value="delays">أخطاء وتأخير</SelectItem>
+<SelectContent dir="rtl">
+  <SelectItem value={TicketInputCategory.COMPLAINT}>
+    شكوى
+  </SelectItem>
+
+  <SelectItem value={TicketInputCategory.ORDER_MODIFICATION}>
+    تعديل طلب
+  </SelectItem>
+
+  <SelectItem value={TicketInputCategory.ORDER_CANCELLATION}>
+    إلغاء طلب
+  </SelectItem>
+
+  <SelectItem value={TicketInputCategory.RETURN_REPLACEMENT}>
+    استبدال / استرجاع
+  </SelectItem>
+
+  <SelectItem value={TicketInputCategory.ORDER_DELAY_ERROR}>
+    أخطاء وتأخير
+  </SelectItem>
+</SelectContent>
                       </SelectContent>
                     </Select>
                     <FormMessage />
