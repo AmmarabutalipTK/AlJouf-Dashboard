@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 
 
 // export const api = axios.create({
@@ -34,8 +34,5 @@ api.interceptors.request.use((config) => {
 
   return config;
 });
-import axios from "axios";
 
-export const api = axios.create({
-  baseURL: "/api",
-});
+
