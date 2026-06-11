@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useLogin } from "@/api/client";
 
 export function LoginPage() {
   const [username, setUsername] = useState("");
@@ -15,47 +16,30 @@ export function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+const loginMutation = useLogin();
   const { login } = useAuth();
   const [, navigate] = useLocation();
 
   const handleLogin = async () => {
-    setError("");
+ try {
+  const data =
+    await loginMutation.mutateAsync({
+      username,
+      password,
+    });
 
-    if (!username || !password) {
-      setError("يرجى إدخال اسم المستخدم وكلمة المرور");
-      return;
-    }
+  login(data.token, data.user);
+  navigate("/");
+} catch (err: any) {
+  console.error(err);
 
-    setLoading(true);
-
-    try {
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          username,
-          password,
-        }),
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message ?? "اسم المستخدم أو كلمة المرور غير صحيحة");
-        return;
-      }
-
-      login(data.token, data.user);
-      navigate("/");
-    } catch (err) {
-      console.error(err);
-      setError("حدث خطأ، يرجى المحاولة مرة أخرى");
-    } finally {
-      setLoading(false);
-    }
+  setError(
+    err?.response?.data?.message ??
+      "اسم المستخدم أو كلمة المرور غير صحيحة"
+  );
+} finally {
+  setLoading(false);
+}
   };
 
 return (
@@ -107,20 +91,6 @@ return (
             </div>
 
             <div className="mt-16 max-w-2xl">
-              <div
-                className="
-                inline-flex
-                rounded-full
-                bg-primary/10
-                px-5
-                py-2
-                text-sm
-                font-bold
-                text-primary
-              "
-              >
-                منصة رقمية متكاملة
-              </div>
 
               <h1
                 className="
@@ -212,9 +182,26 @@ return (
             </div>
           </div>
 
-          <p className="text-sm text-muted-foreground">
+          <div className="flex flex-row gap-4">
+
+              <a
+    href="https://aljouf-manual.takarubdev.com/"
+    target="_blank"
+    rel="noopener noreferrer"
+className="text-sm text-muted-foreground underline"
+  >
+    دليل الجوف
+  </a>
+                      <p className="text-sm text-muted-foreground">
             © 2026 الجوف للتنمية
           </p>
+
+
+
+          </div>
+
+
+          
         </div>
       </section>
 
@@ -237,23 +224,7 @@ return (
             </div>
           </div>
 
-          <div className="mb-5 flex justify-center">
-            <div
-              className="
-              rounded-full
-              border
-              border-primary/10
-              bg-primary/5
-              px-5
-              py-2
-              text-sm
-              font-semibold
-              text-primary
-            "
-            >
-              تسجيل الدخول
-            </div>
-          </div>
+
 
           <Card
             className="
@@ -344,7 +315,7 @@ return (
 
                 <Button
                   onClick={handleLogin}
-                  disabled={loading}
+                  disabled={loginMutation.isPending}
                   className="
                   h-14
                   w-full
@@ -353,11 +324,11 @@ return (
                   font-bold
                 "
                 >
-                  {loading
+                  {loginMutation.isPending
                     ? "جارٍ التحقق..."
                     : "تسجيل الدخول"}
 
-                  {!loading && (
+                  {!loginMutation.isPending && (
                     <ArrowLeft className="mr-2 h-4 w-4" />
                   )}
                 </Button>

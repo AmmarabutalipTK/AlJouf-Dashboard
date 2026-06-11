@@ -174,6 +174,7 @@ function Router() {
       />}
 
       <Route component={NotFound} />
+      
     </Switch>
   );
 }
@@ -188,6 +189,7 @@ function App() {
             base={import.meta.env.BASE_URL.replace(/\/$/, "")}
           >
             <Router />
+            
           </WouterRouter>
 
           <Toaster />

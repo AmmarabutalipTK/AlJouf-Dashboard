@@ -194,7 +194,7 @@ export function Sidebar({
 
       {/* User Section */}
       <div className="border-t border-green-100 p-4">
-        <div
+        {/* <div
           className="
           mb-4
           flex
@@ -231,7 +231,7 @@ export function Sidebar({
                 : "موظف خدمة العملاء"}
             </p>
           </div>
-        </div>
+        </div> */}
 
         <Button
           variant="ghost"
@@ -253,7 +253,9 @@ export function Sidebar({
         <p className="mt-4 text-center text-xs text-muted-foreground">
           الإصدار 1.0.0
         </p>
+        
       </div>
+      
     </aside>
   );
 }

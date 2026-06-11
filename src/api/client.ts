@@ -471,4 +471,32 @@ export function useUpdateUser() {
       });
     },
   });
+
+  
+}
+
+
+export type LoginRequest = {
+  username: string;
+  password: string;
+};
+
+export type LoginResponse = {
+  token: string;
+  user: User;
+};
+
+export function useLogin() {
+  return useMutation({
+    mutationFn: async (
+      payload: LoginRequest
+    ): Promise<LoginResponse> => {
+      const { data } = await api.post(
+        "/auth/login",
+        payload
+      );
+
+      return data;
+    },
+  });
 }

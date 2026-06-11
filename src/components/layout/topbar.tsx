@@ -1,8 +1,10 @@
 import {
   RefreshCcw,
   ShieldCheck,
+  BookOpen,
   User,
 } from "lucide-react";
+
 
 import { useQueryClient } from "@tanstack/react-query";
 
@@ -105,68 +107,88 @@ export function Topbar() {
       </div>
 
       {/* Right Side */}
-      <div className="flex items-center gap-3">
-        <Button
-          variant="outline"
-          onClick={handleRefresh}
-          className="
-            h-12
-            rounded-2xl
-            border-green-100
-            bg-white
-            px-4
-          "
-        >
-          <RefreshCcw className="ml-2 h-4 w-4" />
-          تحديث
-        </Button>
+{/* Right Side */}
+<div className="flex items-center gap-3">
+  <Button
+    variant="outline"
+    onClick={handleRefresh}
+    className="
+      h-12
+      rounded-2xl
+      border-green-100
+      bg-white
+      px-4
+    "
+  >
+    <RefreshCcw className="ml-2 h-4 w-4" />
+    تحديث
+  </Button>
 
-        <div
-          className="
-          flex
-          items-center
-          gap-3
-          rounded-2xl
-          border
-          border-green-100
-          bg-white
-          px-4
-          py-2
-        "
-        >
-          <div
-            className="
-            flex
-            h-12
-            w-12
-            items-center
-            justify-center
-            rounded-2xl
-            bg-primary/10
-          "
-          >
-            {user?.role === "ADMIN" ? (
-              <ShieldCheck className="h-5 w-5 text-primary" />
-            ) : (
-              <User className="h-5 w-5 text-primary" />
-            )}
-          </div>
+  <Button
+    asChild
+    variant="outline"
+    className="
+      h-12
+      rounded-2xl
+      border-green-100
+      bg-white
+      px-4
+    "
+  >
+    <a
+      href="https://aljouf-manual.takarubdev.com/"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      <BookOpen className="ml-2 h-4 w-4" />
+      دليل الجوف
+    </a>
+  </Button>
 
-          <div className="text-right">
-            <p className="font-bold">
-              {user?.username ??
-                "مدير النظام"}
-            </p>
+  <div
+    className="
+      flex
+      items-center
+      gap-3
+      rounded-2xl
+      border
+      border-green-100
+      bg-white
+      px-4
+      py-2
+    "
+  >
+    <div
+      className="
+        flex
+        h-12
+        w-12
+        items-center
+        justify-center
+        rounded-2xl
+        bg-primary/10
+      "
+    >
+      {user?.role === "ADMIN" ? (
+        <ShieldCheck className="h-5 w-5 text-primary" />
+      ) : (
+        <User className="h-5 w-5 text-primary" />
+      )}
+    </div>
 
-            <p className="text-xs text-muted-foreground">
-              {user?.role === "ADMIN"
-                ? "مدير النظام"
-                : "موظف خدمة العملاء"}
-            </p>
-          </div>
-        </div>
-      </div>
+    <div className="text-right">
+      <p className="font-bold">
+        {user?.username ?? "مدير النظام"}
+      </p>
 
+      <p className="text-xs text-muted-foreground">
+        {user?.role === "ADMIN"
+          ? "مدير النظام"
+          : "موظف خدمة العملاء"}
+      </p>
+    </div>
+  </div>
+</div>
       {/* Decorative Glow */}
       <div
         className="

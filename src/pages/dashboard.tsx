@@ -699,7 +699,9 @@ function StatCard({
             {icon}
           </div>
         </div>
+        
       </div>
+      
     </div>
   );
 }
