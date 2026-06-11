@@ -110,7 +110,7 @@ export function Sidebar({
           </div>
 
           <h2 className="mt-4 text-lg font-black">
-            الجوف للتنمية
+            الجوف الزراعية
           </h2>
 
           <p className="text-sm text-muted-foreground">

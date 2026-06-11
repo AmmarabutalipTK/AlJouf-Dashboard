@@ -81,7 +81,7 @@ return (
 
               <div>
                 <h2 className="text-2xl font-black">
-                  الجوف للتنمية
+الجوف الزراعية
                 </h2>
 
                 <p className="mt-1 text-muted-foreground">
@@ -193,7 +193,7 @@ className="text-sm text-muted-foreground underline"
     دليل الجوف
   </a>
                       <p className="text-sm text-muted-foreground">
-            © 2026 الجوف للتنمية
+            © 2026 الجوف الزراعية 
           </p>
 
 
